@@ -141,5 +141,51 @@ namespace Algo.Tests
         }
 
 
+
+        [TestCase( 3712, 5000 )]
+        [TestCase( 3640, 5000 )]
+        [TestCase( 486, 5000 )]
+        [TestCase( 286, 5000 )]
+        public void fourty_best_movies_for_user_and_NbSimilarUser( int idxUser, int nbSimilarUsers )
+        {
+            var options = new UserRecoOptions()
+            {
+                NbSimilarUser = nbSimilarUsers,
+                DeltaMovieRating = 3,
+                MaxMovieCount = 40,
+                OnlyPositiveUserSimilarity = false
+            };
+
+            DumpReco( idxUser, options );
+        }
+
+        [TestCase( 3712, 3 )]
+        [TestCase( 3712, 2 )]
+        [TestCase( 3712, 1 )]
+        [TestCase( 3712, 0 )]
+        public void fourty_best_movies_with_5000_similar_users_for_user_and_DeltaMovieRating( int idxUser, int deltaMovieRating )
+        {
+            var options = new UserRecoOptions()
+            {
+                NbSimilarUser = 5000,
+                DeltaMovieRating = deltaMovieRating,
+                MaxMovieCount = 40,
+                OnlyPositiveUserSimilarity = false
+            };
+            DumpReco( idxUser, options );
+        }
+
+        void DumpReco( int idxUser, UserRecoOptions options )
+        {
+            var u = _context.Users[idxUser];
+            var recos = _context.GetRecoMovies( u, options );
+
+            Console.WriteLine( $" ========== User n°{idxUser} - {options} ==========" );
+            foreach( var r in recos )
+            {
+                Console.WriteLine( $"{r.Movie.MovieId} - [{string.Join( ", ", r.Movie.Categories )}] - {r.Movie.Title} - Count: {r.Count} - Weight: {r.Weight}" );
+            }
+        }
     }
 }
+

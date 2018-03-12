@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Algo
 {
 
-    public partial class User
+    public partial class User : IRatedBy<Movie>
     {
         internal static string[] CellSeparator = new string[] { "::" };
 
