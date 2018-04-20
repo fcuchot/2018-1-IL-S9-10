@@ -74,5 +74,16 @@ namespace Algo.Tests
 
         }
 
+
+        [Test]
+        public void dump_guests_flights_count()
+        {
+            FlightDatabase db = new FlightDatabase( GetFlightDataPath() );
+            Meeting m = new Meeting( db );
+            foreach( var g in m.Guests )
+            {
+                Console.WriteLine( $"{g.Name} ({g.Location.Code}) => {g.ArrivalFlights.Count}, {g.DepartureFlights.Count}" );
+            }
+        }
     }
 }

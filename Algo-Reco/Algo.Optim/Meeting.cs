@@ -9,11 +9,21 @@ namespace Algo.Optim
     {
         public Guest( Meeting m,
                       string name,
-                      Airport location )
+                      Airport guestLocation )
         {
             Name = name;
-            Location = location;
-
+            Location = guestLocation;
+            var db = m.FlightDatabase;
+            ArrivalFlights = db.GetFlights( m.MaxBusTimeOnArrival, guestLocation, m.Location )
+                                .Concat( db.GetFlights( m.MaxBusTimeOnArrival.AddDays(-1), guestLocation, m.Location ) )
+                                .Where( f => f.ArrivalTime < m.MaxBusTimeOnArrival )
+                                .OrderByDescending( f => f.ArrivalTime )
+                                .ToArray();
+            DepartureFlights = db.GetFlights( m.MinBusTimeOnDeparture, m.Location, guestLocation )
+                                 .Concat( db.GetFlights( m.MinBusTimeOnDeparture.AddDays( 1 ), m.Location, guestLocation ) )
+                                 .Where( f => f.DepartureTime > m.MinBusTimeOnDeparture )
+                                 .OrderBy( f => f.DepartureTime )
+                                 .ToArray();
         }
 
         public string Name { get; }
