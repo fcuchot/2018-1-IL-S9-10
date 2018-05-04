@@ -21,6 +21,18 @@ namespace Algo.Optim
 
         public SolutionSpace Space => _space;
 
+        public IEnumerable<SolutionInstance> Neighbors { get; }
+
+        /// <summary>
+        /// Gets the minimal cost among <see cref="Neighbors"/>.
+        /// Never null since we always have at least one neighbor.
+        /// </summary>
+        /// <returns>The best neighbor.</returns>
+        SolutionInstance BestAmongNeigbors()
+        {
+
+        }
+
         public IReadOnlyList<int> Coordinates => _coordinates;
 
         public double Cost
