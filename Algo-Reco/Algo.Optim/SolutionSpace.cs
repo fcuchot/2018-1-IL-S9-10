@@ -21,8 +21,11 @@ namespace Algo.Optim
 
         public SolutionInstance GetRandomInstance()
         {
-
+            var randomCoordinates = Dimensions.Select( count => _random.Next( count ) ).ToArray();
+            return CreateInstance( randomCoordinates );
         }
+
+        protected abstract SolutionInstance CreateInstance( IReadOnlyList<int> randomCoordinates );
 
         protected void Initialize( IReadOnlyList<int> spaceDimensions )
         {

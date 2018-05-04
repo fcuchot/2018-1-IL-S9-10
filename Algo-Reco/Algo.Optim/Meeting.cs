@@ -48,5 +48,9 @@ namespace Algo.Optim
 
         public IReadOnlyList<Guest> Guests { get; }
 
+        protected override SolutionInstance CreateInstance( IReadOnlyList<int> coordinates )
+        {
+            return new MeetingInstance( this, coordinates );
+        }
     }
 }
