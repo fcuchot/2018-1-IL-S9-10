@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace Algo.Optim
 {
-    public class MeetingInstance
+    public class MeetingInstance : SolutionInstance
     {
-        public Meeting Meeting { get; }
-
-        public MeetingInstance( Meeting m, int[] vector )
+        public MeetingInstance( Meeting m, IReadOnlyList<int> coordinates )
+            : base( m, coordinates )
         {
-            Meeting = m;
         }
 
-        public double ComputeCost()
+        public new Meeting Space => (Meeting)base.Space;
+
+        protected override double ComputeCost()
         {
-
+            return 0.0;
         }
-
     }
 }

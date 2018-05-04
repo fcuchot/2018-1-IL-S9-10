@@ -5,45 +5,10 @@ using System.Text;
 
 namespace Algo.Optim
 {
-    public class Guest
+    public class Meeting : SolutionSpace
     {
-        public Guest( Meeting m,
-                      string name,
-                      Airport guestLocation )
-        {
-            Name = name;
-            Location = guestLocation;
-            var db = m.FlightDatabase;
-            ArrivalFlights = db.GetFlights( m.MaxBusTimeOnArrival, guestLocation, m.Location )
-                                .Concat( db.GetFlights( m.MaxBusTimeOnArrival.AddDays(-1), guestLocation, m.Location ) )
-                                .Where( f => f.ArrivalTime < m.MaxBusTimeOnArrival )
-                                .OrderByDescending( f => f.ArrivalTime )
-                                .ToArray();
-            DepartureFlights = db.GetFlights( m.MinBusTimeOnDeparture, m.Location, guestLocation )
-                                 .Concat( db.GetFlights( m.MinBusTimeOnDeparture.AddDays( 1 ), m.Location, guestLocation ) )
-                                 .Where( f => f.DepartureTime > m.MinBusTimeOnDeparture )
-                                 .OrderBy( f => f.DepartureTime )
-                                 .ToArray();
-        }
-
-        public string Name { get; }
-
-        public Airport Location { get; }
-
-        /// <summary>
-        /// No stop is flights required.
-        /// (Unused, this is just a sample of constraint.)
-        /// </summary>
-        public bool NoStop { get; set; }
-
-        public IReadOnlyList<SimpleFlight> ArrivalFlights { get; }
-
-        public IReadOnlyList<SimpleFlight> DepartureFlights { get; }
-    }
-
-    public class Meeting
-    {
-        public Meeting( FlightDatabase db )
+        public Meeting( int randomSeed, FlightDatabase db )
+            : base( randomSeed )
         {
             FlightDatabase = db;
             Location = Airport.FindByCode( "LHR" );
@@ -61,6 +26,16 @@ namespace Algo.Optim
                 new Guest( this, "Abdel", Airport.FindByCode( "TUN" ) ),
                 new Guest( this, "Isabella", Airport.FindByCode( "MXP" ) )
             };
+            // Initialize 
+            int[] spaceDimensions = new int[2 * Guests.Count];
+            int i = 0;
+            foreach( var g in Guests )
+            {
+                spaceDimensions[i] = g.ArrivalFlights.Count;
+                spaceDimensions[i + Guests.Count] = g.DepartureFlights.Count;
+                ++i;
+            }
+            Initialize( spaceDimensions );
         }
 
         public FlightDatabase FlightDatabase { get; }
@@ -72,5 +47,6 @@ namespace Algo.Optim
         public DateTime MinBusTimeOnDeparture { get; }
 
         public IReadOnlyList<Guest> Guests { get; }
+
     }
 }
