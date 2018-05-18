@@ -7,6 +7,7 @@ using Algo.Optim;
 using System.Xml.Linq;
 using System.Runtime.CompilerServices;
 using System.IO;
+using FluentAssertions;
 
 namespace Algo.Tests
 {
@@ -84,6 +85,16 @@ namespace Algo.Tests
             {
                 Console.WriteLine( $"{g.Name} ({g.Location.Code}) => {g.ArrivalFlights.Count}, {g.DepartureFlights.Count}" );
             }
+        }
+
+        [Test]
+        public void simple_MonteCarlo()
+        {
+            FlightDatabase db = new FlightDatabase( GetFlightDataPath() );
+            Meeting m = new Meeting( 3712, db );
+            var x = m.GetRandomInstance();
+            var b = x.GetBestMonteCarlo();
+            b.Cost.Should().BeLessOrEqualTo( x.Cost );
         }
     }
 }

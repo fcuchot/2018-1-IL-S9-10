@@ -49,14 +49,14 @@ namespace Algo.Optim
         /// Never null since we always have at least one neighbor.
         /// </summary>
         /// <returns>The best neighbor.</returns>
-        SolutionInstance GetBestAmongNeighbors() => Neighbors.Aggregate( ( b, c ) => b != null || c.Cost > b.Cost ? b : c );
+        public SolutionInstance GetBestAmongNeighbors() => Neighbors.Aggregate( ( b, c ) => c.Cost > b.Cost ? b : c );
 
         /// <summary>
         /// Gets the best solution instance reachable by following the Monte Carlo principle.
         /// It may be this solution.
         /// </summary>
         /// <returns>The best reachable solution.</returns>
-        SolutionInstance GetBestMonteCarlo()
+        public SolutionInstance GetBestMonteCarlo()
         {
             SolutionInstance candidate;
             var best = this;
