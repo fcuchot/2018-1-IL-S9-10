@@ -28,7 +28,7 @@ namespace Algo.Optim
             return CreateInstance( randomCoordinates );
         }
 
-        SolutionInstance CreateInstance( IReadOnlyList<int> coordinates )
+        internal SolutionInstance CreateInstance( IReadOnlyList<int> coordinates )
         {
             var s = DoCreateInstance( coordinates );
             if( _theBest == null || s.Cost < _theBest.Cost ) _theBest = s;
